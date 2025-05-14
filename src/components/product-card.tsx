@@ -43,15 +43,11 @@ export function ProductCard3D({ product }: ProductCard3DProps) {
   };
 
   return (
-    <CardContainer className="w-full">
-      <CardBody className="bg-white relative group/card dark:bg-zinc-900 border  border-zinc-200 dark:border-zinc-800 w-full h-full rounded-xl p-2">
-        <CardItem translateZ="50" className="text-xl font-bold text-zinc-800  dark:text-white">
-          {product.name}
-        </CardItem>
-
-        
-
-        <CardItem translateZ="100" className="w-full mt-2">
+    <div className="grid grid-cols-1  items-center w-full ">
+    <CardContainer className="w-full" containerClassName="py-4">
+      <CardBody className="bg-white relative group/card dark:bg-zinc-900 border  border-zinc-200 dark:border-zinc-800 w-full h-full rounded-xl  p-2">
+      
+         <CardItem translateZ="100" className="w-full mt-2">
           <div className="aspect-video relative w-full h-48 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
             {imageError ? (
               <div className="flex flex-col items-center justify-center text-gray-400">
@@ -67,7 +63,8 @@ export function ProductCard3D({ product }: ProductCard3DProps) {
               />
             )}
           </div>
-        </CardItem>
+        </CardItem> 
+    
 
         <div className="flex justify-between items-center mt-6 space-x-1">
           <CardItem translateZ={20} className="flex-1 px-2 py-2 rounded-xl text-lg font-bold text-zinc-800 dark:text-white whitespace-nowrap">
@@ -88,8 +85,15 @@ export function ProductCard3D({ product }: ProductCard3DProps) {
               {product.status}
             </Badge>
           </CardItem>
+       
         </div>
+       
       </CardBody>
     </CardContainer>
+    <p className="mt-[-6px] text-center font-semibold text-zinc-800 dark:text-white text-base">
+      {product.name}
+    </p>
+    </div>
+    
   );
 }

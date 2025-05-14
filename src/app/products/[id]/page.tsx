@@ -21,6 +21,7 @@ export default function ProductsPage() {
   const [product, setProduct] = useState<Product | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
   const { id } = useParams()
   const router = useRouter()
 
@@ -56,6 +57,24 @@ export default function ProductsPage() {
     }
   }
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return
+    const touchEndX = e.changedTouches[0].clientX
+    const diffX = touchStartX - touchEndX
+
+    if (diffX > 50) {
+      handleNextImage() // Sağa kaydırma
+    } else if (diffX < -50) {
+      handlePrevImage() // Sola kaydırma
+    }
+
+    setTouchStartX(null)
+  }
+
   const goBack = () => {
     router.back()
   }
@@ -77,9 +96,21 @@ export default function ProductsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Product Image Section */}
-      <div className="relative w-full h-[70vh] bg-black">
+      <div
+        className="relative w-full h-[70vh] bg-black"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* Back Button */}
         <button onClick={goBack} className="absolute top-4 left-4 z-10 text-white p-2 rounded-full bg-black/30">
+          <ArrowLeft size={24} />
+        </button>
+
+        {/* Previous Image Button */}
+        <button
+          onClick={handlePrevImage}
+          className="absolute top-1/2 left-4 z-10 text-white p-2 rounded-full bg-black/30 transform -translate-y-1/2"
+        >
           <ArrowLeft size={24} />
         </button>
 
@@ -89,6 +120,14 @@ export default function ProductsPage() {
           alt={product.name}
           className="w-full h-full object-cover"
         />
+
+        {/* Next Image Button */}
+        <button
+          onClick={handleNextImage}
+          className="absolute top-1/2 right-4 z-10 text-white p-2 rounded-full bg-black/30 transform -translate-y-1/2"
+        >
+          <ArrowLeft size={24} className="rotate-180" />
+        </button>
 
         {/* Product Name Overlay */}
         <div className="absolute bottom-6 left-6 right-6">
@@ -107,8 +146,6 @@ export default function ProductsPage() {
           </span>
         </div>
       </div>
-
-   
     </div>
   )
 }
